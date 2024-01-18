@@ -30,6 +30,8 @@ public class Enseignant {
 
     private Boolean profPrincipal = false;
 
+    private Boolean isResponsable = false;
+
 
     @ManyToOne
     @JoinColumn(name = "departement_id")

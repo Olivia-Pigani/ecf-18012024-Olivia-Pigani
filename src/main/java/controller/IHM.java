@@ -1,23 +1,28 @@
 package controller;
 
 import daoImpl.*;
+import entities.Departement;
+import entities.Enseignant;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import service.SchoolService;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class IHM {
 
-private Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
 
-private int choice;
+    private int choice;
 
-private boolean run = true;
+    private boolean run = true;
 
-// import services et dao
+    // import services et dao
     private static ClasseDAOimpl classeDAO;
     private static DepartementDAOimpl departementDAO;
     private static EmploiDTDAOimpl emploiDTDAO;
@@ -26,24 +31,25 @@ private boolean run = true;
     private static MatiereDAOimpl matiereDAO;
     private static NoteDAOimpl noteDAO;
 
+    private static SchoolService schoolService;
+
 
     public IHM() {
     }
 
 
-
     /// à voir
 
-    public void printMenu(){
+    public void printMenu() {
         choice = scanner.nextInt();
-        while (run){
+        while (run) {
             System.out.println("===Menu===");
             System.out.println("1. Create ");
             System.out.println("2. Read ");
             System.out.println("3. Delete ");
             System.out.println("4. Close App");
 
-            switch (choice){
+            switch (choice) {
                 case 1:
                     createMenu();
                     break;
@@ -64,8 +70,6 @@ private boolean run = true;
         }
 
 
-
-
     }
 
     private void closeAll() {
@@ -73,7 +77,7 @@ private boolean run = true;
 
     private void ReadMenu() {
         choice = scanner.nextInt();
-        while (run){
+        while (run) {
 
             System.out.println("You want to read ?");
             System.out.println("1. Afficher la liste des classes (sans les eleves)");
@@ -82,9 +86,9 @@ private boolean run = true;
             System.out.println("4. Afficher la moyenne d'un eleve");
             System.out.println("5. Afficher le nombre d'eleve d'un département.");
             System.out.println("6. Afficher tous les noms des eleves d'un niveau.");
-            
-            
-            switch (choice){
+
+
+            switch (choice) {
                 case 1:
                     getAllClasses();
                     break;
@@ -102,21 +106,21 @@ private boolean run = true;
                     break;
                 default:
                     System.out.println("wrong input, retry ! ");
-                    run=false;
+                    run = false;
             }
         }
     }
 
     private void DeleteMenu() {
         choice = scanner.nextInt();
-        while (run){
+        while (run) {
 
             System.out.println("You want to delete ?");
             System.out.println("1. un eleve");
             System.out.println("2. une classe");
             System.out.println("3. un département");
-            
-            switch (choice){
+
+            switch (choice) {
                 case 1:
                     deleteEleve();
                     break;
@@ -128,15 +132,15 @@ private boolean run = true;
                     break;
                 default:
                     System.out.println("wrong input, retry ! ");
-                    run=false;
+                    run = false;
             }
-            
+
         }
     }
 
     private void createMenu() {
         choice = scanner.nextInt();
-        while (run){
+        while (run) {
             System.out.println("You want to create ? ");
             System.out.println("1. département ");
             System.out.println("2. enseignant ");
@@ -147,7 +151,7 @@ private boolean run = true;
             System.out.println("7. emploi du temps");
             System.out.println("8. back ");
 
-            switch (choice){
+            switch (choice) {
                 case 1:
                     createdep();
                     break;
@@ -175,16 +179,138 @@ private boolean run = true;
                     System.out.println(" wrong input ");
                     run = false;
             }
-            
-            
+
+
+        }
+
+
+    }
+
+    private void cretaeEDT() {
+    }
+
+    private void createClasse() {
+    }
+
+    private void createNote() {
+    }
+
+    private void createMatiere() {
+        try {
+            System.out.println("Quelle est l'intitulé ? ");
+            String intitulé = scanner.nextLine();
+            System.out.println("Quelle est la description? ");
+            String description = scanner.nextLine();
+            System.out.println("Quelle est la durée en minute ? "); // entre 0 et 60 minutes max
+            int dureeMin = scanner.nextInt();
+            scanner.nextLine();
+            if ((dureeMin <0) || (dureeMin>60)){
+                System.out.println("la durée doit etre au delà de 0 et pas au dessus de 60 minutes !! ");
+                throw new IllegalArgumentException();
+            }
+            System.out.println("Quel est le coeff ? ");
+            int coeff = scanner.nextInt();
+            if (coeff<0 || coeff>5){
+                throw new IllegalArgumentException(" le coeff doit etre compris entre 1 et 5 ");
+            }
+
+            schoolService.addMatiere(intitulé,description,dureeMin,coeff);
+        }catch (Exception e){
+            System.out.println("something wrong during ?matière? producing ! ");
+            e.printStackTrace();
         }
 
 
 
     }
-    
-    
-    
+
+    private void createEtudiant() {
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            System.out.println("Quel est son nom ?");
+            String nom = scanner.nextLine();
+            System.out.println("Quel est son prenom ?");
+            String prenom = scanner.nextLine();
+
+            System.out.println("Quel est sa date de naissance ?");
+            String birthDateStr = scanner.nextLine();
+            Date birthDate = format.parse(birthDateStr);
+
+
+                System.out.println("Quel est son email ? ce doit etre un email de type 'gmail.com'");
+                String email = scanner.nextLine();
+                if (!email.contains("gmail.com")) {
+                    throw new IllegalArgumentException("not a gmail ! ");
+                }
+
+
+
+            schoolService.addEtudiant(nom,prenom,birthDate,email);
+
+
+        }catch (Exception e){
+            System.out.println("something wrong during student producing ! ");
+            e.printStackTrace();
+
+        }
+    }
+
+    private void createEnseignant() {
+        try {
+            System.out.println("Quel nom à cet enseignant ?");
+            String nom = scanner.nextLine();
+            System.out.println("Quel prenom à cet enseignant ?");
+            String prenom = scanner.nextLine();
+
+            System.out.println("Quel est l'age de cet enseignant ?");
+            int age = scanner.nextInt();
+
+            System.out.println("Quel est le grade de cet enseignant ?");
+            String grade = scanner.nextLine();
+
+            System.out.println("Est il un prof principal ? oui ou non ");
+            String profPxStr = scanner.nextLine().toLowerCase();
+            Boolean profPx = false;
+            if (profPxStr == "oui") {
+                profPx = true;
+            }
+
+            System.out.println("est t'il responsable d'un departement ? oui ou non ");
+            String responsableStr = scanner.nextLine().toLowerCase();
+            Boolean responsable = false;
+
+            if (responsableStr == "oui") {
+
+                System.out.println("quel est l'id de ce departement ? ");
+                int depId = scanner.nextInt();
+                scanner.nextLine();
+
+                if (schoolService.getById(depId) != null){
+
+                    responsable = true;
+                }
+
+            }
+
+
+            schoolService.createEnseignant(nom,prenom,grade,responsable,profPx,age,responsable);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createdep() {
+        try {
+            System.out.println("Quel nom à ce département ?");
+            String nom = scanner.nextLine();
+            schoolService.createdep(nom);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
 }

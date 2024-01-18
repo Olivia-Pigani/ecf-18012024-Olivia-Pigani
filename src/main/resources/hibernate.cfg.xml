@@ -7,7 +7,13 @@
 
 
     <session-factory>
-
+<mapping class="entities.EmploiDuTemps"/>
+        <mapping class="entities.Enseignant"/>
+        <mapping class="entities.Departement"/>
+        <mapping class="entities.Note"/>
+        <mapping class="entities.Etudiant"/>
+        <mapping class="entities.Classe"/>
+        <mapping class="entities.Matiere"/>
     </session-factory>
 
 </hibernate-configuration>

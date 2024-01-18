@@ -150,4 +150,14 @@ public class DepartementDAOimpl implements BaseDAO<Departement> {
         }
         return false;
     }
+
+    //todo
+    public int studentNumber(){
+        return 0;
+    }
+
+    //todo
+    public void showAllStudentNameByLevel(String niveau){
+
+    }
 }

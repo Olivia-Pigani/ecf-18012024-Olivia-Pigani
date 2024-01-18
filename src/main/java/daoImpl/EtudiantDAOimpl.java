@@ -80,7 +80,7 @@ public class EtudiantDAOimpl implements BaseDAO<Etudiant> {
 
             Query<Etudiant> query = session.createQuery("from Etudiant ");
             List<Etudiant> etudiantList = query.list();
-            return departementList;
+            return etudiantList;
 
         }catch (Exception e){
             if (tx != null){
@@ -155,5 +155,10 @@ public class EtudiantDAOimpl implements BaseDAO<Etudiant> {
             sessionFactory.close();
         }
         return false;
+    }
+
+    //todo
+    public float showAvgByStudent(int id){
+       return 0;
     }
 }

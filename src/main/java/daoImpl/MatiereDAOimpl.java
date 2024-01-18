@@ -2,6 +2,7 @@ package daoImpl;
 
 import dao.BaseDAO;
 import entities.EmploiDuTemps;
+import entities.Etudiant;
 import entities.Matiere;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -155,4 +156,13 @@ public class MatiereDAOimpl implements BaseDAO<Matiere> {
         }
         return false;
     }
+
+    //todo
+    public int showAllMatiere(int id){
+        return 0;
+    }
+
+
+
+
 }

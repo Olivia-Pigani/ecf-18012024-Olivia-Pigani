@@ -78,7 +78,7 @@ public class EnseignantDAOimpl implements BaseDAO<Enseignant> {
 
             Query<Enseignant> query = session.createQuery("from Enseignant ");
             List<Enseignant> enseignantList = query.list();
-            return departementList;
+            return enseignantList;
 
         }catch (Exception e){
             if (tx != null){

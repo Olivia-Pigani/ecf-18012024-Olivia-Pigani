@@ -152,4 +152,9 @@ public class NoteDAOimpl implements BaseDAO<Note> {
         }
         return false;
     }
+
+    //todo
+    public List<Note> showScoreByStudent(int id){
+        return null;
+    }
 }

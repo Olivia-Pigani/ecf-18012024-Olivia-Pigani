@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,7 +22,7 @@ public class EmploiDuTemps {
     @Column(name = "emploi_du_tps_id")
     private int id;
 
-    private LocalDate jourEtHeure;
+    private Date jourEtHeure;
 
     @OneToMany(mappedBy = "emploiDuTemps", fetch = FetchType.LAZY)
     private List<Classe> classeList = new ArrayList<>();

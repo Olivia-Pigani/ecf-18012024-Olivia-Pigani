@@ -25,11 +25,11 @@ public class Note {
 
     private int valeur;
 
-    @OneToMany
-    private List<Matiere> matiereList = new ArrayList<>();
+    @ManyToOne
+    private Matiere matiere;
 
-    @OneToMany(mappedBy = "note",fetch = FetchType.LAZY)
-    private List<Etudiant> etudiantList = new ArrayList<>();
+   @ManyToOne
+    private Etudiant etudiant;
 
 
 

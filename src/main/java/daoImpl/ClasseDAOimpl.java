@@ -3,6 +3,7 @@ package daoImpl;
 import dao.BaseDAO;
 import entities.Classe;
 import entities.Departement;
+import entities.Etudiant;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -156,4 +157,31 @@ public class ClasseDAOimpl implements BaseDAO<Classe> {
     }
 
 
+    public List<Classe> getAllClassesNoStudent() {
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+
+            Query<Classe> classeQuery = session.createQuery("select nom, niveau from Classe ");
+            List<Classe> classeList = classeQuery.list();
+            if (classeList != null){
+                return classeList;
+
+            }
+
+
+        }catch (Exception e){
+            if (tx != null){
+                tx.rollback();
+                e.printStackTrace();
+                return false;
+            }
+        }finally {
+            session.close();
+            sessionFactory.close();
+        }
+        return null;
+    }
 }

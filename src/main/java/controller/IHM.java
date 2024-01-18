@@ -111,6 +111,10 @@ public class IHM {
         }
     }
 
+    private void getAllClasses() {
+        schoolService.getAllClassesNoStudent();
+    }
+
     private void DeleteMenu() {
         choice = scanner.nextInt();
         while (run) {
@@ -135,6 +139,52 @@ public class IHM {
                     run = false;
             }
 
+        }
+    }
+
+    private void deleteDepartement() {
+        try {
+            System.out.println("quel est l'id du departement à delete ?");
+            int deptId = scanner.nextInt();
+            if (schoolService.getByIdDept(deptId) == null ){
+                throw new IllegalArgumentException();
+            }
+            schoolService.deleteDept(deptId);
+            System.out.println("success !! ");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteClasse() {
+        try {
+            System.out.println("quel est l'id de la classe à delete ?");
+            int classeId = scanner.nextInt();
+            if (schoolService.getByIdClasse(classeId) == null){
+                throw  new IllegalArgumentException();
+            }
+            schoolService.deleteClasse(classeId);
+            System.out.println("success !! ");
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteEleve() {
+        try {
+            System.out.println("quel est l'id de leleve à delete ?");
+            int eleveId = scanner.nextInt();
+            scanner.nextLine();
+            if (schoolService.getByIdEleve(eleveId) == null){
+                throw new IllegalArgumentException();
+            }
+
+            schoolService.deleteEleve(eleveId);
+            System.out.println("success !");
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -171,7 +221,7 @@ public class IHM {
                     createClasse();
                     break;
                 case 7:
-                    cretaeEDT();
+                    createEDT();
                     break;
                 case 8:
                     printMenu();
@@ -186,13 +236,67 @@ public class IHM {
 
     }
 
-    private void cretaeEDT() {
+    private void createEDT() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        try {
+            System.out.println("Quel est le jour et l'heure ? Format => dd-MM-yyyy HH:mm:ss");
+            String jourEtHeureStr = scanner.nextLine();
+            Date jourEtHeure = dateFormat.parse(jourEtHeureStr);
+
+            schoolService.addEDT(jourEtHeure);
+
+
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
     }
 
     private void createClasse() {
+        try {
+            System.out.println("Quel est son nom ?");
+            String nom = scanner.nextLine();
+            System.out.println("Quel est le niveau ?");
+            String niveau = scanner.nextLine();
+
+            schoolService.addClasse(nom,niveau);
+
+        }catch (Exception e){
+            System.out.println("something wrong !! ");
+            e.printStackTrace();
+        }
     }
 
     private void createNote() {
+        try {
+            System.out.println("quelle est la valeur ?");
+            int score = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println("quelle est le commentaire ?");
+            String com = scanner.nextLine();
+            System.out.println("Quelle est l'id de la matière concernée ? ");
+            int matiereId = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println("Quelle est l'id de l'eleve concernée ? ");
+            int eleveId = scanner.nextInt();
+            scanner.nextLine();
+
+            if (schoolService.getByIdMatiere(matiereId) == null || schoolService.getByIdEtudiant(eleveId) == null){
+                throw new IllegalArgumentException();
+            }
+
+            schoolService.addNote(score,com,matiereId, eleveId);
+
+
+        }catch (Exception e){
+            System.out.println("aucune matiere correspondante et/ou aucun eleve correspondant ! ");
+            e.printStackTrace();
+        }
     }
 
     private void createMatiere() {

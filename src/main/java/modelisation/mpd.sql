@@ -1,89 +1,73 @@
+drop database school;
 
--- -- create database school;
--- -- use school;
+CREATE DATABASE school;
+USE school;
 
+CREATE TABLE departement (
+    departement_id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(255)
+);
 
--- create table if not exists enseignant(
--- id int primary key not null auto_increment,
--- nom varchar(50),
--- prenom varchar(50),
--- age int not null,
--- grade varchar(10) not null,
--- prof_principal boolean not null default false
--- foreign key (departement_id) references departement(id)
--- );
+CREATE TABLE emploi_du_tps (
+    emploi_du_tps_id INT AUTO_INCREMENT PRIMARY KEY,
+    jourEtHeure DATETIME
+);
 
--- create table if not exists departement(
--- id int primary key not null auto_increment,
--- nom varchar(50),
+CREATE TABLE matiere (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    intitule VARCHAR(255),
+    description TEXT,
+    dureeMin INT,
+    coeff INT
+);
 
--- );
+CREATE TABLE enseignant (
+    enseignant_id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(255),
+    prenom VARCHAR(255),
+    age INT,
+    grade VARCHAR(255),
+    profPrincipal BOOLEAN,
+    isResponsable BOOLEAN,
+    departement_id INT,
+    FOREIGN KEY (departement_id) REFERENCES departement(departement_id)
+);
 
--- ALTER TABLE departement ADD responsable_id INT;
--- ALTER TABLE departement ADD FOREIGN KEY (responsable_id) REFERENCES enseignant(id);
+CREATE TABLE etudiant (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(255),
+    prenom VARCHAR(255),
+    dateNaissance DATE,
+    email VARCHAR(255)
+);
+CREATE TABLE classe (
+    classe_id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(255),
+    niveau VARCHAR(255),
+    departement_id INT,
+    emploi_du_tps_id INT,
+    enseignant_id INT,
+    FOREIGN KEY (departement_id) REFERENCES departement(departement_id),
+    FOREIGN KEY (emploi_du_tps_id) REFERENCES emploi_du_tps(emploi_du_tps_id),
+    FOREIGN KEY (enseignant_id) REFERENCES enseignant(enseignant_id)
+);
 
--- --------------------------------------------------------------------------------------------
-
--- create table if not exists matiere(
--- id int primary key not null auto_increment,
--- intitule varchar(50) not null,
--- description varchar(1000),
--- duree_min int not null,
--- coeff int not null
--- );
-
--- create table if not exists enseignant_matiere(
---  enseignant_id int,
---  matiere_id int,
---   foreign key (enseignant_id) references enseignant(id),
---     primary key (enseignant_id, matiere_id)
---     foreign key (matiere_id) references matiere(id),
-
--- );
-
--- create table if not exists classe(
--- id int primary key not null auto_increment,
--- nom varchar(50),
--- niveau varchar(20),
---     departement_id int,
-    -- emploi_du_tps_id INT,
-
---     foreign key (departement_id) references departement(id)
-    -- FOREIGN KEY (emploi_du_tps_id) REFERENCES emploi_du_tps(id)
-
-
--- );
-
--- create table if not exists emploi_du_tps(
--- matiere_id int,
--- classe_id int,
--- jour_et_heure datetime not null,
---     foreign key (matiere_id) references matiere(id),
-
--- );
-
-
--- create table if not exists etudiant(
--- id int primary key not null auto_increment,
--- nom varchar(50),
--- prenom varchar(50),
--- date_naissance Date not null,
--- email varchar(150) not null,
---  classe_id INT,
---     FOREIGN KEY (classe_id) REFERENCES classe(id)
-
-
--- );
-
--- create table if not exists note (
--- id int primary key not null auto_increment,
--- commentaire varchar(100),
--- valeur int not null,
--- matiere_id int,
--- etudiant_id int,
--- foreign key (matiere_id) references matiere(id),
--- foreign key (etudiant_id) references etudiant(id)
--- );
+CREATE TABLE note (
+    note_id INT AUTO_INCREMENT PRIMARY KEY,
+    commentaire TEXT,
+    valeur INT,
+    matiere_id INT,
+    etudiant_id INT,
+    FOREIGN KEY (matiere_id) REFERENCES matiere(id),
+    FOREIGN KEY (etudiant_id) REFERENCES etudiant(id)
+);
+CREATE TABLE enseignant_matiere (
+    enseignant_id INT,
+    matiere_id INT,
+    PRIMARY KEY (enseignant_id, matiere_id),
+    FOREIGN KEY (enseignant_id) REFERENCES enseignant(enseignant_id),
+    FOREIGN KEY (matiere_id) REFERENCES matiere(id)
+);
 
 
 -- Créer un département
@@ -95,7 +79,7 @@
 
 
 -- Créer un étudiant
--- INSERT INTO etudiants (nom, prenom, date_naissance, email, classe_id) VALUES ('Mouse', 'Minnie', '2004-05-20', 'minnie@gmail.com', 1);
+-- INSERT INTO etudiant (nom, prenom, date_naissance, email, classe_id) VALUES ('Mouse', 'Minnie', '2004-05-20', 'minnie@gmail.com', 1);
 
 -- Créer une matière
 -- INSERT INTO matiere (intitule, description, duree_min, coeff) VALUES ('Info', 'Description', 45, 4);

@@ -19,7 +19,7 @@ public class NoteDAOimpl implements BaseDAO<Note> {
 
     public NoteDAOimpl() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-        sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+        this.sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     }
 
     @Override

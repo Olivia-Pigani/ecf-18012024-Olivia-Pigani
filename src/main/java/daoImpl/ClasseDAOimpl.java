@@ -25,23 +25,20 @@ public class ClasseDAOimpl implements BaseDAO<Classe> {
 
     @Override
     public boolean add(Classe element) {
-        Session session = null;
         Transaction tx = null;
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
 
             session.save(element);
             session.getTransaction().commit();
             return true;
-        }catch (Exception e){
-            if (tx != null){
+        } catch (Exception e) {
+            if (tx != null) {
                 tx.rollback();
                 e.printStackTrace();
                 return false;
             }
-        }finally {
-            session.close();
+        } finally {
             sessionFactory.close();
         }
         return false;
@@ -54,7 +51,7 @@ public class ClasseDAOimpl implements BaseDAO<Classe> {
         try {
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
-            Classe classeToFind = session.load(Classe.class,id);
+            Classe classeToFind = session.get(Classe.class,id);
             return classeToFind;
 
         }catch (Exception e){

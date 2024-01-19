@@ -176,7 +176,6 @@ public class ClasseDAOimpl implements BaseDAO<Classe> {
             if (tx != null){
                 tx.rollback();
                 e.printStackTrace();
-                return false;
             }
         }finally {
             session.close();

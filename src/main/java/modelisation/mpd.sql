@@ -10,19 +10,17 @@
 -- age int not null,
 -- grade varchar(10) not null,
 -- prof_principal boolean not null default false
+-- foreign key (departement_id) references departement(id)
 -- );
 
 -- create table if not exists departement(
 -- id int primary key not null auto_increment,
 -- nom varchar(50),
---     responsable_id int,
-
--- foreign key (responsable_id) references enseignant(id) -- pour le responsable du département
 
 -- );
 
--- --  ALTER TABLE enseignant ADD departement_id INT;
--- --  ALTER TABLE enseignant ADD FOREIGN KEY (departement_id) REFERENCES departement(id);
+-- ALTER TABLE departement ADD responsable_id INT;
+-- ALTER TABLE departement ADD FOREIGN KEY (responsable_id) REFERENCES enseignant(id);
 
 -- --------------------------------------------------------------------------------------------
 
@@ -38,8 +36,9 @@
 --  enseignant_id int,
 --  matiere_id int,
 --   foreign key (enseignant_id) references enseignant(id),
---     foreign key (matiere_id) references matiere(id),
 --     primary key (enseignant_id, matiere_id)
+--     foreign key (matiere_id) references matiere(id),
+
 -- );
 
 -- create table if not exists classe(
@@ -47,17 +46,19 @@
 -- nom varchar(50),
 -- niveau varchar(20),
 --     departement_id int,
+    -- emploi_du_tps_id INT,
+
 --     foreign key (departement_id) references departement(id)
+    -- FOREIGN KEY (emploi_du_tps_id) REFERENCES emploi_du_tps(id)
+
 
 -- );
 
 -- create table if not exists emploi_du_tps(
 -- matiere_id int,
 -- classe_id int,
---     foreign key (matiere_id) references matiere(id),
---     foreign key (classe_id) references classe(id),
 -- jour_et_heure datetime not null,
--- primary key (matiere_id, classe_id, jour_et_heure)
+--     foreign key (matiere_id) references matiere(id),
 
 -- );
 

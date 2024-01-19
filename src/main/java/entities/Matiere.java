@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,12 +32,13 @@ public class Matiere {
     @ManyToMany(mappedBy = "matiereList")
     private List<Enseignant> enseignantList;
 
-    @ManyToOne
-    private Note note;
+    @OneToMany(mappedBy = "matiere", fetch = FetchType.LAZY)
+    private List<Note> noteList = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "emploi_du_tps")
+    @JoinColumn(name = "emploi_du_tps_id")
     private EmploiDuTemps emploiDuTemps;
+
 
 
 

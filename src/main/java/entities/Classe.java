@@ -27,7 +27,8 @@ public class Classe {
 
     private String niveau;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "departement_id")
     private Departement departement;
 
     @ManyToOne

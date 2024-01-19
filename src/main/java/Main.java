@@ -1,5 +1,10 @@
+import controller.IHM;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("qsqs<d");
+
+        IHM ihm = new IHM();
+        ihm.printMenu();
+
     }
 }

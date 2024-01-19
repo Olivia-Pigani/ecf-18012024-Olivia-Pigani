@@ -11,11 +11,8 @@ import java.util.Scanner;
 public class IHM {
 
     private Scanner scanner = new Scanner(System.in);
-
     private int choice;
-
     private boolean run = true;
-
     // import services et dao
     private static ClasseDAOimpl classeDAO;
     private static DepartementDAOimpl departementDAO;
@@ -24,15 +21,19 @@ public class IHM {
     private static EtudiantDAOimpl etudiantDAO;
     private static MatiereDAOimpl matiereDAO;
     private static NoteDAOimpl noteDAO;
-
     private static SchoolService schoolService;
 
 
     public IHM() {
+        classeDAO = new ClasseDAOimpl();
+        departementDAO = new DepartementDAOimpl();
+        emploiDTDAO = new EmploiDTDAOimpl();
+        enseignantDAO = new EnseignantDAOimpl();
+        etudiantDAO = new EtudiantDAOimpl();
+        matiereDAO = new MatiereDAOimpl();
+        noteDAO = new NoteDAOimpl();
+        schoolService = new SchoolService( departementDAO,  enseignantDAO,  etudiantDAO,  matiereDAO,  noteDAO,  classeDAO,  emploiDTDAO);
     }
-
-
-    /// à voir
 
     public void printMenu() {
         choice = scanner.nextInt();

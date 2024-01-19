@@ -26,9 +26,11 @@ public class Note {
     private int valeur;
 
     @ManyToOne
+    @JoinColumn(name = "matiere_id")
     private Matiere matiere;
 
    @ManyToOne
+   @JoinColumn(name = "etudiant_id")
     private Etudiant etudiant;
 
 

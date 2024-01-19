@@ -3,6 +3,7 @@ package service;
 import daoImpl.*;
 import entities.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -168,11 +169,11 @@ public class SchoolService {
     public void getAllClassesNoStudent() {
         try {
 
-            List<Etudiant> etudiantList =  classeDAO.getAllClassesNoStudent();
+            List<Classe> classeList =  classeDAO.getAllClassesNoStudent();
 
-            for (Etudiant e:etudiantList
+            for (Classe c:classeList
                  ) {
-                System.out.println(e);
+                System.out.println(c);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -217,6 +218,20 @@ public class SchoolService {
     public void deleteDept(int deptId) {
         try {
             departementDAO.delete(deptId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    public void getAllMatierePareleve(int idStudent) {
+        try {
+            int matiereNb = -1;
+            Etudiant etudiant = etudiantDAO.getById(idStudent);
+            if (etudiant != null){
+                matiereNb = etudiantDAO.showMatiereNbByStudent(idStudent);
+                System.out.println(" l'élève " + etudiant.getNom() + " " + etudiant.getPrenom() + " à " + matiereNb + " matière(s) ! ");
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

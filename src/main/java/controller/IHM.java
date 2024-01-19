@@ -1,12 +1,6 @@
 package controller;
 
 import daoImpl.*;
-import entities.Departement;
-import entities.Enseignant;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import service.SchoolService;
 
 
@@ -47,7 +41,7 @@ public class IHM {
             System.out.println("1. Create ");
             System.out.println("2. Read ");
             System.out.println("3. Delete ");
-            System.out.println("4. Close App");
+
 
             switch (choice) {
                 case 1:
@@ -59,8 +53,6 @@ public class IHM {
                 case 3:
                     DeleteMenu();
                     break;
-                case 4:
-                    closeAll();
                 default:
                     System.out.println("wrong input, retry ! ");
                     run = false;
@@ -109,6 +101,12 @@ public class IHM {
                     run = false;
             }
         }
+    }
+
+    private void getAllMatierePareleve() {
+        System.out.println("Quel est l'id de cet élève ? ");
+        int idStudent = scanner.nextInt();
+        schoolService.getAllMatierePareleve(idStudent);
     }
 
     private void getAllClasses() {

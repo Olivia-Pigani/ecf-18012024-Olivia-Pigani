@@ -161,4 +161,34 @@ public class EtudiantDAOimpl implements BaseDAO<Etudiant> {
     public float showAvgByStudent(int id){
        return 0;
     }
+
+    public int showMatiereNbByStudent(int studentId) {
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+
+
+            Query query = session.createQuery("select count(distinct note.matiere) from Note note where note.etudiant.id = :studentId");
+            query.setParameter("studentId",studentId);
+
+            int matiereByStudent = (int) query.uniqueResult();
+
+            return matiereByStudent;
+
+
+        } catch (Exception e) {
+            if (tx != null){
+                tx.rollback();
+                e.printStackTrace();
+            }
+        } finally {
+            session.close();
+            sessionFactory.close();
+        }
+
+        return -1;
+    }
+
 }

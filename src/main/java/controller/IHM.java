@@ -353,6 +353,10 @@ public class IHM {
             System.out.println("Quel est son prenom ?");
             String prenom = scanner.nextLine();
 
+            if (nom.isEmpty() || nom == null || nom.length()<3){
+                throw new IllegalArgumentException();
+            }
+
             System.out.println("Quel est sa date de naissance ?");
             String birthDateStr = scanner.nextLine();
             Date birthDate = format.parse(birthDateStr);
@@ -360,7 +364,8 @@ public class IHM {
 
                 System.out.println("Quel est son email ? ce doit etre un email de type 'gmail.com'");
                 String email = scanner.nextLine();
-                if (!email.contains("gmail.com")) {
+                String regex = "^[\\w-\\.]+@gmail\\.com$";
+                if (!email.matches(regex)) {
                     throw new IllegalArgumentException("not a gmail ! ");
                 }
 
@@ -383,9 +388,18 @@ public class IHM {
             System.out.println("Quel prenom à cet enseignant ?");
             String prenom = scanner.nextLine();
 
+            if (nom.isEmpty() || nom == null || nom.length()<3){
+                throw new IllegalArgumentException();
+            }
+
             System.out.println("Quel est l'age de cet enseignant ?");
             int age = scanner.nextInt();
-
+            while (age<18 ){
+                System.out.println("Il doit etre majeur ! ");
+                System.out.println("Resaisissez ");
+                age = scanner.nextInt();
+            }
+            scanner.nextLine();
             System.out.println("Quel est le grade de cet enseignant ?");
             String grade = scanner.nextLine();
 

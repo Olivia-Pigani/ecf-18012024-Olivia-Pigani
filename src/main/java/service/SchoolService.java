@@ -236,4 +236,75 @@ public class SchoolService {
             e.printStackTrace();
         }
     }
+
+    public List<Note> getStudentScoresDetails(int studentId) {
+        try {
+            List<Note> noteList = new ArrayList<>();
+            Etudiant etudiant = etudiantDAO.getById(studentId);
+            if (etudiant != null){
+               noteList = etudiantDAO.showScoresByStudent(studentId);
+
+                System.out.println("Pour l'étudiant " + etudiant.getPrenom() + " " + etudiant.getNom());
+                for (Note n: noteList
+                     ) {
+                    System.out.println("note " + n.getCommentaire() + " " + n.getValeur() + n.getMatiere());
+                }
+
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void studentAvg(int idStudent) {
+        try {
+
+            Etudiant etudiant = etudiantDAO.getById(idStudent);
+            if (etudiant != null){
+               float studentAverage =  etudiantDAO.showStudentAVG(idStudent);
+                System.out.println(" La moyenne de l'élève est de " + studentAverage);
+            }
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+    }
+
+    public void allStudentNameByLevel(String niveau) {
+        List<Classe> classeList = new ArrayList<>();
+        List<Etudiant> etudiantList = new ArrayList<>();
+        boolean levelIsPresent = false;
+
+        try {
+            classeList = classeDAO.getAll();
+
+            for (Classe c: classeList
+                 ) {
+                if (niveau.equals(c.getNiveau())) {
+                    levelIsPresent = true;
+                    break;
+                }
+
+            }
+
+            if (levelIsPresent){
+                etudiantList = etudiantDAO.getAllByLevel(niveau);
+                System.out.println("Le niveau : " + niveau + " à ces élèves :");
+                for (Etudiant e:etudiantList
+                     ) {
+                    System.out.println(e.getNom());
+                }
+
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

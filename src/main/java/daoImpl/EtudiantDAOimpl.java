@@ -3,6 +3,7 @@ package daoImpl;
 import dao.BaseDAO;
 import entities.EmploiDuTemps;
 import entities.Etudiant;
+import entities.Note;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,6 +12,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EtudiantDAOimpl implements BaseDAO<Etudiant> {
@@ -25,23 +27,20 @@ public class EtudiantDAOimpl implements BaseDAO<Etudiant> {
 
     @Override
     public boolean add(Etudiant element) {
-        Session session = null;
         Transaction tx = null;
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
 
             session.save(element);
-            session.getTransaction().commit();
+            tx.commit();
             return true;
-        }catch (Exception e){
-            if (tx != null){
+        } catch (Exception e) {
+            if (tx != null) {
                 tx.rollback();
                 e.printStackTrace();
                 return false;
             }
-        }finally {
-            session.close();
+        } finally {
             sessionFactory.close();
         }
         return false;
@@ -49,61 +48,47 @@ public class EtudiantDAOimpl implements BaseDAO<Etudiant> {
 
     @Override
     public Etudiant getById(int id) {
-        Session session = null;
         Transaction tx = null;
-        try {
-            session = sessionFactory.openSession();
-            tx = session.beginTransaction();
-            Etudiant etudiantsToFind = session.load(Etudiant.class,id);
-            return etudiantsToFind;
-
-        }catch (Exception e){
-
-            if (tx != null){
-                tx.rollback();
-                e.printStackTrace();
-            }
-        }finally {
-            session.close();
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Etudiant.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
             sessionFactory.close();
         }
-        return null;
     }
 
     @Override
     public List<Etudiant> getAll() {
         Session session = null;
         Transaction tx = null;
+        List<Etudiant> etudiantList = new ArrayList<>();
         try {
             session = sessionFactory.openSession();
-            tx = session.beginTransaction();
 
-            Query<Etudiant> query = session.createQuery("from Etudiant ");
-            List<Etudiant> etudiantList = query.list();
+            Query<Etudiant> query = session.createQuery("from Etudiant ", Etudiant.class);
+            etudiantList = query.list();
             return etudiantList;
 
         }catch (Exception e){
-            if (tx != null){
-                tx.rollback();
                 e.printStackTrace();
-            }
         }finally {
             session.close();
             sessionFactory.close();
         }
-        return null;
+        return etudiantList;
     }
 
     @Override
     public boolean update(int id, Etudiant element) {
-        Session session = null;
         Transaction tx = null;
-        try {
-            session = sessionFactory.openSession();
+        Etudiant etudiantToUpdate = null;
+        try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
 
-            Etudiant etudiantToUpdate = getById(id);
-            if (etudiantToUpdate!= null){
+            etudiantToUpdate = getById(id);
+            if (etudiantToUpdate != null) {
                 etudiantToUpdate.setNom(element.getNom());
                 etudiantToUpdate.setPrenom(element.getPrenom());
                 etudiantToUpdate.setEmail(element.getEmail());
@@ -113,65 +98,53 @@ public class EtudiantDAOimpl implements BaseDAO<Etudiant> {
                 tx.commit();
                 return true;
             }
+            return false;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
             return false;
-        }finally {
-            session.close();
+        } finally {
             sessionFactory.close();
         }
-        return false;
     }
 
 
     @Override
     public boolean delete(int id) {
-        Session session = null;
         Transaction tx = null;
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
 
-            Etudiant etudiantToRemove = session.load(Etudiant.class,id);
-            session.delete(etudiantToRemove);
+            Etudiant etudiantToRemove = session.get(Etudiant.class, id);
 
-            session.getTransaction().commit();
-
-            return true;
-
-        }catch (Exception e){
-            if (tx != null){
+            if (etudiantToRemove != null) {
+                session.delete(etudiantToRemove);
+                tx.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            if (tx != null) {
                 tx.rollback();
                 e.printStackTrace();
                 return false;
             }
 
-        }finally {
-            session.close();
+        } finally {
             sessionFactory.close();
         }
         return false;
     }
 
-    //todo
-    public float showAvgByStudent(int id){
-       return 0;
-    }
+
 
     public int showMatiereNbByStudent(int studentId) {
-        Session session = null;
-        Transaction tx = null;
-        try {
-            session = sessionFactory.openSession();
-            tx = session.beginTransaction();
-
+        try (Session session = sessionFactory.openSession()) {
 
             Query query = session.createQuery("select count(distinct note.matiere) from Note note where note.etudiant.id = :studentId");
-            query.setParameter("studentId",studentId);
+            query.setParameter("studentId", studentId);
 
             int matiereByStudent = (int) query.uniqueResult();
 
@@ -179,16 +152,63 @@ public class EtudiantDAOimpl implements BaseDAO<Etudiant> {
 
 
         } catch (Exception e) {
-            if (tx != null){
-                tx.rollback();
                 e.printStackTrace();
-            }
         } finally {
-            session.close();
             sessionFactory.close();
         }
 
         return -1;
     }
+
+
+    public List<Note> showScoresByStudent(int studentId){
+        List<Note> noteList = new ArrayList<>();
+        try(Session session = sessionFactory.openSession()) {
+            Query<Note> noteQuery = session.createQuery("from Note where etudiant.id = :studentId", Note.class);
+            noteQuery.setParameter("studentId",studentId);
+
+            noteList = noteQuery.list();
+
+            return noteList;
+
+        }catch (Exception e){
+                e.printStackTrace();
+        }finally {
+            sessionFactory.close();
+        }
+        return noteList;
+    }
+
+    public float showStudentAVG(int idStudent) {
+        try (Session session = sessionFactory.openSession()){
+            Query query = session.createQuery("select sum(note.valeur * matiere.coeff) / sum(matiere.coeff) from Note note join note.matiere matiere where note.etudiant.id = :idStudent");
+            query.setParameter("idStudent",idStudent);
+
+            return (float) query.uniqueResult();
+
+        }catch (Exception e){
+                e.printStackTrace();
+        }finally {
+            sessionFactory.close();
+        }
+
+        return -1;
+    }
+
+    public List<Etudiant> getAllByLevel(String niveau){
+        List<Etudiant> etudiantList = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()){
+            Query<Etudiant> query = session.createQuery("SELECT e FROM Etudiant e JOIN e.classe c WHERE c.niveau = :niveau", Etudiant.class);
+            query.setParameter("niveau", niveau);
+            etudiantList = query.list();
+
+        }catch (Exception e){
+                e.printStackTrace();
+        }finally {
+            sessionFactory.close();
+        }
+        return etudiantList;
+    }
+
 
 }

@@ -64,8 +64,6 @@ public class IHM {
 
     }
 
-    private void closeAll() {
-    }
 
     private void ReadMenu() {
         choice = scanner.nextInt();
@@ -102,6 +100,26 @@ public class IHM {
             }
         }
     }
+
+    private void allStudentNameByLevel() {
+        System.out.println("Quel est l'id du niveau ?");
+        String niveau = scanner.nextLine();
+        schoolService.allStudentNameByLevel(niveau);
+    }
+
+    private void studentAvg() {
+        System.out.println("Quel est l'id de cet élève ? ");
+        int idStudent = scanner.nextInt();
+        schoolService.studentAvg(idStudent);
+    }
+
+    private void getStudentScoresDetails() {
+        System.out.println("Quel est l'id de cet élève ? ");
+        int idStudent = scanner.nextInt();
+        schoolService.getStudentScoresDetails(idStudent);
+
+    }
+
 
     private void getAllMatierePareleve() {
         System.out.println("Quel est l'id de cet élève ? ");
